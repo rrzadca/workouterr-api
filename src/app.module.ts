@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
-import { ExcerciseModule } from './excercise/excercise.module';
 import { PlanModule } from './plan/plan.module';
 import { TrainingModule } from './training/training.module';
+import { ExerciseModule } from './exercise/exercise.module';
 
 @Module({
-  imports: [UserModule, ExcerciseModule, PlanModule, TrainingModule],
+  imports: [UserModule, PlanModule, TrainingModule, ExerciseModule],
   controllers: [],
   providers: [],
 })
