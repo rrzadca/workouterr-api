@@ -23,7 +23,6 @@ export class UsersController {
 
     @Get()
     findAll() {
-        console.log(` ;; process.env`, process.env);
         return this.usersService.findAll();
     }
 
