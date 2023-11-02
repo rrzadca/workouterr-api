@@ -1,4 +1,4 @@
-import { User } from '../src/crud/users/entities/user.entity';
+import { User } from '../src/users/entities/user.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { registerAs } from '@nestjs/config';
 

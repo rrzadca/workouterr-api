@@ -14,18 +14,18 @@ export class UsersService {
         private readonly repository: Repository<User>,
     ) {}
 
-    async create(createUserDto: CreateUserDto) {
+    async create(createUserDto: CreateUserDto): Promise<User> {
         return await this.repository.save({
             ...createUserDto,
             createdOn: new Date(),
         });
     }
 
-    async findAll() {
+    async findAll(): Promise<User[]> {
         return await this.repository.find();
     }
 
-    async findOne(id: string) {
+    async findOne(id: string): Promise<User> {
         const user = await this.repository.findOneBy({
             id: id,
         });
@@ -38,7 +38,7 @@ export class UsersService {
         return user;
     }
 
-    async update(id: string, updateUserDto: UpdateUserDto) {
+    async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
         const user = await this.findOne(id);
 
         if (!user) {
@@ -53,7 +53,7 @@ export class UsersService {
         });
     }
 
-    async remove(id: string) {
+    async remove(id: string): Promise<void> {
         const user = await this.findOne(id);
 
         if (!user) {
