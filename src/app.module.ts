@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './crud/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './crud/users/entities/user.entity';
 
 @Module({
     imports: [
@@ -10,7 +11,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             port: 3306,
             username: 'root',
             password: 'example',
-            database: 'workouterr-db',
+            database: 'workouterr_db',
+            entities: [User],
+            synchronize: true,
         }),
         UsersModule,
     ],
