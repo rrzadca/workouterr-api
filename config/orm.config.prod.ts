@@ -3,6 +3,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { registerAs } from '@nestjs/config';
 import { Plan } from '../src/plans/entities/plan.entity';
 import { Exercise } from '../src/exercises/entities/exercise.entity';
+import { PlansGroup } from '../src/plans-groups/entities/plans-group.entity';
 
 export default registerAs(
     'orm.config.prod',
@@ -13,7 +14,7 @@ export default registerAs(
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        entities: [User, Exercise, Plan],
+        entities: [User, Exercise, Plan, PlansGroup],
         synchronize: false,
     }),
 );
