@@ -1,5 +1,6 @@
 import { BaseEntity } from '../../share/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { Plan } from '../../plans/entities/plan.entity';
 
 @Entity('plans_groups')
 export class PlansGroup extends BaseEntity {
@@ -8,4 +9,7 @@ export class PlansGroup extends BaseEntity {
         length: 100,
     })
     name: string;
+
+    @OneToMany(() => Plan, (plan) => plan.plansGroup)
+    plans: Plan[];
 }

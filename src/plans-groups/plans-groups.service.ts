@@ -1,19 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePlansGroupDto } from './dto/create-plans-group.dto';
 import { UpdatePlansGroupDto } from './dto/update-plans-group.dto';
-import { BaseService } from '../share/base.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlansGroup } from './entities/plans-group.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class PlansGroupsService extends BaseService {
+export class PlansGroupsService {
+    private readonly logger = new Logger(PlansGroupsService.name);
+
     constructor(
         @InjectRepository(PlansGroup)
         private readonly repository: Repository<PlansGroup>,
-    ) {
-        super();
-    }
+    ) {}
 
     async create(
         createPlansGroupDto: CreatePlansGroupDto,
@@ -25,14 +24,14 @@ export class PlansGroupsService extends BaseService {
     }
 
     async findAll(): Promise<PlansGroup[]> {
-        return await this.repository.find();
+        return await this.repository.find({ relations: ['plans'] });
     }
 
     async findOne(id: string): Promise<PlansGroup> {
         const plansGroup = await this.repository.findOneBy({ id: id });
 
         if (!plansGroup) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${PlansGroup.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
@@ -46,7 +45,7 @@ export class PlansGroupsService extends BaseService {
         const plansGroup = await this.repository.findOneBy({ id: id });
 
         if (!plansGroup) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${PlansGroup.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
@@ -61,7 +60,7 @@ export class PlansGroupsService extends BaseService {
         const plansGroup = await this.repository.findOneBy({ id: id });
 
         if (!plansGroup) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${PlansGroup.name} with :id=${id}`);
             throw new NotFoundException();
         }
 

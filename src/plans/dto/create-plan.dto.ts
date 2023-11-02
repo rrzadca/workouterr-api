@@ -4,4 +4,6 @@ export class CreatePlanDto {
     @IsString()
     @Length(1, 100)
     name: string;
+
+    plansGroupId: string;
 }

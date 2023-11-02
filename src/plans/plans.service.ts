@@ -1,21 +1,36 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
-import { BaseService } from '../share/base.service';
 import { Plan } from './entities/plan.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PlansGroup } from '../plans-groups/entities/plans-group.entity';
 
 @Injectable()
-export class PlansService extends BaseService {
+export class PlansService {
+    private readonly logger = new Logger(PlansService.name);
+
     constructor(
         @InjectRepository(Plan) private readonly repository: Repository<Plan>,
-    ) {
-        super();
-    }
+        @InjectRepository(PlansGroup)
+        private readonly plansGroupRepository: Repository<PlansGroup>,
+    ) {}
+
     async create(createPlanDto: CreatePlanDto): Promise<Plan> {
+        const plansGroup = await this.plansGroupRepository.findOneBy({
+            id: createPlanDto.plansGroupId,
+        });
+
+        if (!plansGroup) {
+            this.logger.warn(
+                `Cannot find ${PlansGroup.name} with :id=${createPlanDto.plansGroupId}`,
+            );
+            throw new NotFoundException();
+        }
+
         return await this.repository.save({
             ...createPlanDto,
+            plansGroup: plansGroup,
             createdOn: new Date(),
         });
     }
@@ -28,7 +43,7 @@ export class PlansService extends BaseService {
         const plan = await this.repository.findOneBy({ id: id });
 
         if (!plan) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${Plan.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
@@ -39,7 +54,7 @@ export class PlansService extends BaseService {
         const plan = await this.repository.findOneBy({ id: id });
 
         if (!plan) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${Plan.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
@@ -54,7 +69,7 @@ export class PlansService extends BaseService {
         const plan = await this.repository.findOneBy({ id: id });
 
         if (!plan) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${Plan.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
