@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './crud/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './crud/users/entities/user.entity';
+import { ConfigModule } from '@nestjs/config';
+import ormConfig from '../config/orm.config';
+import ormConfigProd from '../config/orm.config.prod';
 
 @Module({
     imports: [
-        TypeOrmModule.forRoot({
-            type: 'mysql',
-            host: '127.0.0.1',
-            port: 3306,
-            username: 'root',
-            password: 'example',
-            database: 'workouterr_db',
-            entities: [User],
-            synchronize: true,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            load: [ormConfig],
+        }),
+        TypeOrmModule.forRootAsync({
+            useFactory:
+                process.env.NODE_ENV !== 'production'
+                    ? ormConfig
+                    : ormConfigProd,
         }),
         UsersModule,
     ],
