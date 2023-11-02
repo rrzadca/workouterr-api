@@ -1,18 +1,19 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BaseService } from '../share/base.service';
 
 @Injectable()
-export class UsersService {
-    private readonly logger = new Logger(UsersService.name);
-
+export class UsersService extends BaseService {
     constructor(
         @InjectRepository(User)
         private readonly repository: Repository<User>,
-    ) {}
+    ) {
+        super();
+    }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
         return await this.repository.save({
@@ -31,7 +32,7 @@ export class UsersService {
         });
 
         if (!user) {
-            this.logger.warn(`Cannot find user with :id=${id}`);
+            this.logNotFoundWarning(id);
             throw new NotFoundException();
         }
 
@@ -42,7 +43,7 @@ export class UsersService {
         const user = await this.findOne(id);
 
         if (!user) {
-            this.logger.warn(`Cannot find user with :id=${id}`);
+            this.logNotFoundWarning(id);
             throw new NotFoundException();
         }
 
@@ -57,7 +58,7 @@ export class UsersService {
         const user = await this.findOne(id);
 
         if (!user) {
-            this.logger.warn(`Cannot find user with :id=${id}`);
+            this.logNotFoundWarning(id);
             throw new NotFoundException();
         }
 
