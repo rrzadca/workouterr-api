@@ -40,7 +40,7 @@ export class UsersService extends BaseService {
     }
 
     async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-        const user = await this.findOne(id);
+        const user = await this.repository.findOneBy({ id: id });
 
         if (!user) {
             this.logNotFoundWarning(id);
@@ -55,7 +55,7 @@ export class UsersService extends BaseService {
     }
 
     async remove(id: string): Promise<void> {
-        const user = await this.findOne(id);
+        const user = await this.repository.findOneBy({ id: id });
 
         if (!user) {
             this.logNotFoundWarning(id);

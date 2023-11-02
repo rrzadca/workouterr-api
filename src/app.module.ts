@@ -3,6 +3,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ExercisesModule } from './exercises/exercises.module';
+import { PlansModule } from './plans/plans.module';
 import ormConfig from '../config/orm.config';
 import ormConfigProd from '../config/orm.config.prod';
 
@@ -20,6 +21,7 @@ import ormConfigProd from '../config/orm.config.prod';
         }),
         UsersModule,
         ExercisesModule,
+        PlansModule,
     ],
     controllers: [],
     providers: [],
