@@ -1,19 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { Exercise } from './entities/exercise.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from '../share/base.service';
 
 @Injectable()
-export class ExercisesService extends BaseService {
+export class ExercisesService {
+    private readonly logger = new Logger(ExercisesService.name);
+
     constructor(
         @InjectRepository(Exercise)
         private readonly repository: Repository<Exercise>,
-    ) {
-        super();
-    }
+    ) {}
 
     async create(createExerciseDto: CreateExerciseDto): Promise<Exercise> {
         return await this.repository.save({
@@ -32,7 +31,7 @@ export class ExercisesService extends BaseService {
         });
 
         if (!exercise) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${Exercise.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
@@ -46,7 +45,7 @@ export class ExercisesService extends BaseService {
         const exercise = await this.findOne(id);
 
         if (!exercise) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${Exercise.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
@@ -61,7 +60,7 @@ export class ExercisesService extends BaseService {
         const exercise = await this.findOne(id);
 
         if (!exercise) {
-            this.logNotFoundWarning(id);
+            this.logger.warn(`Cannot find ${Exercise.name} with :id=${id}`);
             throw new NotFoundException();
         }
 
