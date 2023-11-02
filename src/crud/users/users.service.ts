@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
+    private readonly logger = new Logger(UsersService.name);
+
     constructor(
         @InjectRepository(User)
         private readonly repository: Repository<User>,
@@ -24,29 +26,41 @@ export class UsersService {
     }
 
     async findOne(id: string) {
-        return await this.repository.findOneBy({
+        const user = await this.repository.findOneBy({
             id: id,
         });
+
+        if (!user) {
+            this.logger.warn(`Cannot find user with :id=${id}`);
+            throw new NotFoundException();
+        }
+
+        return user;
     }
 
     async update(id: string, updateUserDto: UpdateUserDto) {
         const user = await this.findOne(id);
 
-        if (user) {
-            return await this.repository.save({
-                ...user,
-                ...updateUserDto,
-                updatedOn: new Date(),
-            });
+        if (!user) {
+            this.logger.warn(`Cannot find user with :id=${id}`);
+            throw new NotFoundException();
         }
 
-        return null;
+        return await this.repository.save({
+            ...user,
+            ...updateUserDto,
+            updatedOn: new Date(),
+        });
     }
 
     async remove(id: string) {
         const user = await this.findOne(id);
-        if (user) {
-            await this.repository.remove(user);
+
+        if (!user) {
+            this.logger.warn(`Cannot find user with :id=${id}`);
+            throw new NotFoundException();
         }
+
+        await this.repository.remove(user);
     }
 }
