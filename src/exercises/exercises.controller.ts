@@ -23,6 +23,7 @@ export class ExercisesController {
     @Post()
     create(@Body() createExerciseDto: CreateExerciseDto): Promise<Exercise> {
         this.logger.log(`call create`);
+        this.logger.debug(createExerciseDto);
         return this.exercisesService.create(createExerciseDto);
     }
 
@@ -34,7 +35,8 @@ export class ExercisesController {
 
     @Get(':id')
     findOne(@Param('id') id: string): Promise<Exercise> {
-        this.logger.log(`call findAll :id=${id}`);
+        this.logger.log(`call findAll`);
+        this.logger.debug(`id: ${id}`);
         return this.exercisesService.findOne(id);
     }
 
@@ -43,14 +45,17 @@ export class ExercisesController {
         @Param('id') id: string,
         @Body() updateExerciseDto: UpdateExerciseDto,
     ): Promise<Exercise> {
-        this.logger.log(`call update :id=${id}`);
+        this.logger.log(`call update`);
+        this.logger.debug(`id: ${id}`);
+        this.logger.debug(updateExerciseDto);
         return this.exercisesService.update(id, updateExerciseDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') id: string): Promise<void> {
-        this.logger.log(`call remove :id=${id}`);
+        this.logger.log(`call remove`);
+        this.logger.debug(`id: ${id}`);
         return this.exercisesService.remove(id);
     }
 }

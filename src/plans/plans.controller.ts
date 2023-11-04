@@ -22,6 +22,7 @@ export class PlansController {
     @Post()
     create(@Body() createPlanDto: CreatePlanDto): Promise<Plan> {
         this.logger.log(`call create`);
+        this.logger.debug(createPlanDto);
         return this.plansService.create(createPlanDto);
     }
 
@@ -33,7 +34,8 @@ export class PlansController {
 
     @Get(':id')
     findOne(@Param('id') id: string): Promise<Plan> {
-        this.logger.log(`call findOne :id=${id}`);
+        this.logger.log(`call findOne`);
+        this.logger.debug(`id: ${id}`);
         return this.plansService.findOne(id);
     }
 
@@ -42,13 +44,16 @@ export class PlansController {
         @Param('id') id: string,
         @Body() updatePlanDto: UpdatePlanDto,
     ): Promise<Plan> {
-        this.logger.log(`call update :id=${id}`);
+        this.logger.log(`call update`);
+        this.logger.debug(`id: ${id}`);
+        this.logger.debug(updatePlanDto);
         return this.plansService.update(id, updatePlanDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string): Promise<void> {
-        this.logger.log(`call remove :id=${id}`);
+        this.logger.log(`call remove`);
+        this.logger.debug(`id: ${id}`);
         return this.plansService.remove(id);
     }
 }

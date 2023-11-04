@@ -24,7 +24,7 @@ export class UsersController {
     @Post()
     create(@Body() createUserDto: CreateUserDto): Observable<User> {
         this.logger.log(`call create`);
-        console.log(` ;; createUserDto`, createUserDto);
+        this.logger.debug(createUserDto);
         return from(this.usersService.create(createUserDto));
     }
 
@@ -36,7 +36,8 @@ export class UsersController {
 
     @Get(':id')
     findOne(@Param('id') id: string): Observable<User> {
-        this.logger.log(`call findOne :id=${id}`);
+        this.logger.log(`call findOne`);
+        this.logger.debug(`id: ${id}`);
         return from(this.usersService.findOne(id));
     }
 
@@ -45,14 +46,17 @@ export class UsersController {
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
     ): Observable<User> {
-        this.logger.log(`call update :id=${id}`);
+        this.logger.log(`call update`);
+        this.logger.debug(`id: ${id}`);
+        this.logger.debug(updateUserDto);
         return from(this.usersService.update(id, updateUserDto));
     }
 
     @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') id: string): Observable<void> {
-        this.logger.log(`call remove :id=${id}`);
+        this.logger.log(`call remove`);
+        this.logger.debug(`id: ${id}`);
         return from(this.usersService.remove(id));
     }
 }

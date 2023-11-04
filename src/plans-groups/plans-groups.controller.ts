@@ -21,6 +21,7 @@ export class PlansGroupsController {
     @Post()
     create(@Body() createPlansGroupDto: CreatePlansGroupDto) {
         this.logger.log(`call create`);
+        this.logger.debug(createPlansGroupDto);
         return this.plansGroupsService.create(createPlansGroupDto);
     }
 
@@ -32,7 +33,8 @@ export class PlansGroupsController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        this.logger.log(`call findOne :id=${id}`);
+        this.logger.log(`call findOne`);
+        this.logger.debug(`id: ${id}`);
         return this.plansGroupsService.findOne(id);
     }
 
@@ -41,13 +43,16 @@ export class PlansGroupsController {
         @Param('id') id: string,
         @Body() updatePlansGroupDto: UpdatePlansGroupDto,
     ) {
-        this.logger.log(`call update :id=${id}`);
+        this.logger.log(`call update`);
+        this.logger.debug(`id: ${id}`);
+        this.logger.debug(updatePlansGroupDto);
         return this.plansGroupsService.update(id, updatePlansGroupDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        this.logger.log(`call remove :id=${id}`);
+        this.logger.log(`call remove`);
+        this.logger.debug(`id: ${id}`);
         return this.plansGroupsService.remove(id);
     }
 }
