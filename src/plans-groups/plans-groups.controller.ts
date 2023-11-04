@@ -7,10 +7,12 @@ import {
     Param,
     Delete,
     Logger,
+    UseGuards,
 } from '@nestjs/common';
 import { PlansGroupsService } from './plans-groups.service';
 import { CreatePlansGroupDto } from './dto/create-plans-group.dto';
 import { UpdatePlansGroupDto } from './dto/update-plans-group.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 
 @Controller('plans-groups')
 export class PlansGroupsController {
@@ -19,6 +21,7 @@ export class PlansGroupsController {
     constructor(private readonly plansGroupsService: PlansGroupsService) {}
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     create(@Body() createPlansGroupDto: CreatePlansGroupDto) {
         this.logger.log(`call create`);
         this.logger.debug(createPlansGroupDto);
@@ -26,12 +29,14 @@ export class PlansGroupsController {
     }
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     findAll() {
         this.logger.log(`call findAll`);
         return this.plansGroupsService.findAll();
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     findOne(@Param('id') id: string) {
         this.logger.log(`call findOne`);
         this.logger.debug(`id: ${id}`);
@@ -39,6 +44,7 @@ export class PlansGroupsController {
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     update(
         @Param('id') id: string,
         @Body() updatePlansGroupDto: UpdatePlansGroupDto,
@@ -50,6 +56,7 @@ export class PlansGroupsController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     remove(@Param('id') id: string) {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);

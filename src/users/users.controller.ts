@@ -9,15 +9,17 @@ import {
     HttpCode,
     Logger,
     BadRequestException,
+    UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 
 @Controller('users')
 export class UsersController {
-    private readonly logger = new Logger(UsersController.name);
+    private readonly logger: Logger = new Logger(UsersController.name);
 
     constructor(private readonly usersService: UsersService) {}
 
@@ -42,19 +44,24 @@ export class UsersController {
     }
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     async findAll(): Promise<User[]> {
         this.logger.log(`call findAll`);
+
         return this.usersService.findAll();
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async findOne(@Param('id') id: string): Promise<User> {
         this.logger.log(`call findOne`);
         this.logger.debug(`id: ${id}`);
+
         return this.usersService.findOne(id);
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     async update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
@@ -62,14 +69,17 @@ export class UsersController {
         this.logger.log(`call update`);
         this.logger.debug(`id: ${id}`);
         this.logger.debug(updateUserDto);
+
         return this.usersService.update(id, updateUserDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
+    @UseGuards(JwtAuthGuard)
     async remove(@Param('id') id: string): Promise<void> {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);
+
         return this.usersService.remove(id);
     }
 }

@@ -8,11 +8,13 @@ import {
     Delete,
     Logger,
     HttpCode,
+    UseGuards,
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { Exercise } from './entities/exercise.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 
 @Controller('exercises')
 export class ExercisesController {
@@ -21,6 +23,7 @@ export class ExercisesController {
     constructor(private readonly exercisesService: ExercisesService) {}
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     create(@Body() createExerciseDto: CreateExerciseDto): Promise<Exercise> {
         this.logger.log(`call create`);
         this.logger.debug(createExerciseDto);
@@ -28,12 +31,14 @@ export class ExercisesController {
     }
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     findAll(): Promise<Exercise[]> {
         this.logger.log(`call findAll`);
         return this.exercisesService.findAll();
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     findOne(@Param('id') id: string): Promise<Exercise> {
         this.logger.log(`call findAll`);
         this.logger.debug(`id: ${id}`);
@@ -41,6 +46,7 @@ export class ExercisesController {
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     update(
         @Param('id') id: string,
         @Body() updateExerciseDto: UpdateExerciseDto,
@@ -53,6 +59,7 @@ export class ExercisesController {
 
     @Delete(':id')
     @HttpCode(204)
+    @UseGuards(JwtAuthGuard)
     remove(@Param('id') id: string): Promise<void> {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);

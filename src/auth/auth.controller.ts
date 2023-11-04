@@ -3,13 +3,15 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user.decorator';
 import { User } from '../users/entities/user.entity';
+import { LocalAuthGuard } from './guards/local.auth-guard';
+import { JwtAuthGuard } from './guards/jwt.auth-guard';
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('login')
-    @UseGuards(AuthGuard('local'))
+    @UseGuards(LocalAuthGuard)
     async login(@CurrentUser() user: User) {
         return {
             userId: user.id,
@@ -18,7 +20,7 @@ export class AuthController {
     }
 
     @Get('profile')
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(JwtAuthGuard)
     async getProfile(@CurrentUser() user: User) {
         return user;
     }
