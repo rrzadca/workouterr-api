@@ -13,7 +13,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { from, map, Observable } from 'rxjs';
-import { UserDto } from './dto/user.dto';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -22,60 +22,31 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto): Observable<UserDto> {
+    create(@Body() createUserDto: CreateUserDto): Observable<User> {
         this.logger.log(`call create`);
-        return from(this.usersService.create(createUserDto)).pipe(
-            map(({ id, email, createdOn, updatedOn }) => ({
-                id,
-                email,
-                createdOn,
-                updatedOn,
-            })),
-        );
+        console.log(` ;; createUserDto`, createUserDto);
+        return from(this.usersService.create(createUserDto));
     }
 
     @Get()
-    findAll(): Observable<UserDto[]> {
+    findAll(): Observable<User[]> {
         this.logger.log(`call findAll`);
-        return from(this.usersService.findAll()).pipe(
-            map((users) =>
-                users.map(({ id, email, createdOn, updatedOn }) => ({
-                    id,
-                    email,
-                    createdOn,
-                    updatedOn,
-                })),
-            ),
-        );
+        return from(this.usersService.findAll());
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string): Observable<UserDto> {
+    findOne(@Param('id') id: string): Observable<User> {
         this.logger.log(`call findOne :id=${id}`);
-        return from(this.usersService.findOne(id)).pipe(
-            map(({ id, email, createdOn, updatedOn }) => ({
-                id,
-                email,
-                createdOn,
-                updatedOn,
-            })),
-        );
+        return from(this.usersService.findOne(id));
     }
 
     @Patch(':id')
     update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
-    ): Observable<UserDto> {
+    ): Observable<User> {
         this.logger.log(`call update :id=${id}`);
-        return from(this.usersService.update(id, updateUserDto)).pipe(
-            map(({ id, email, createdOn, updatedOn }) => ({
-                id,
-                email,
-                createdOn,
-                updatedOn,
-            })),
-        );
+        return from(this.usersService.update(id, updateUserDto));
     }
 
     @Delete(':id')

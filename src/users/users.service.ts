@@ -22,12 +22,27 @@ export class UsersService {
     }
 
     async findAll(): Promise<User[]> {
-        return await this.repository.find();
+        return await this.repository.find({
+            select: {
+                id: true,
+                email: true,
+                createdOn: true,
+                updatedOn: true,
+            },
+        });
     }
 
     async findOne(id: string): Promise<User> {
-        const user = await this.repository.findOneBy({
-            id: id,
+        const user = await this.repository.findOne({
+            where: {
+                id: id,
+            },
+            select: {
+                id: true,
+                email: true,
+                createdOn: true,
+                updatedOn: true,
+            },
         });
 
         if (!user) {
@@ -42,6 +57,12 @@ export class UsersService {
         return await this.repository.findOne({
             where: {
                 email,
+            },
+            select: {
+                id: true,
+                email: true,
+                createdOn: true,
+                updatedOn: true,
             },
         });
     }
