@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthService } from '../auth/auth.service';
+import passport from 'passport';
 
 @Injectable()
 export class UsersService {
@@ -12,11 +14,15 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly repository: Repository<User>,
+        private authService: AuthService,
     ) {}
 
     async create(createUserDto: CreateUserDto): Promise<User> {
         return await this.repository.save({
             ...createUserDto,
+            password: await this.authService.hashPassword(
+                createUserDto.password,
+            ),
             createdOn: new Date(),
         });
     }

@@ -7,6 +7,7 @@ import { User } from '../users/entities/user.entity';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
+
     @Post('login')
     @UseGuards(AuthGuard('local'))
     async login(@CurrentUser() user: User) {

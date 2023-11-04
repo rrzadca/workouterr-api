@@ -8,11 +8,11 @@ import {
     Delete,
     HttpCode,
     Logger,
+    BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { from, map, Observable } from 'rxjs';
 import { User } from './entities/user.entity';
 
 @Controller('users')
@@ -22,41 +22,54 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto): Observable<User> {
+    async create(@Body() createUserDto: CreateUserDto): Promise<User> {
         this.logger.log(`call create`);
         this.logger.debug(createUserDto);
-        return from(this.usersService.create(createUserDto));
+
+        if (createUserDto.password !== createUserDto.retypedPassword) {
+            this.logger.warn(`Passwords are not match`);
+            throw new BadRequestException(['Passwords are not match']);
+        }
+
+        if (await this.usersService.findByEmail(createUserDto.email)) {
+            this.logger.warn('Provided email address already exists');
+            throw new BadRequestException([
+                'Provided email address already exists',
+            ]);
+        }
+
+        return this.usersService.create(createUserDto);
     }
 
     @Get()
-    findAll(): Observable<User[]> {
+    async findAll(): Promise<User[]> {
         this.logger.log(`call findAll`);
-        return from(this.usersService.findAll());
+        return this.usersService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string): Observable<User> {
+    async findOne(@Param('id') id: string): Promise<User> {
         this.logger.log(`call findOne`);
         this.logger.debug(`id: ${id}`);
-        return from(this.usersService.findOne(id));
+        return this.usersService.findOne(id);
     }
 
     @Patch(':id')
-    update(
+    async update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
-    ): Observable<User> {
+    ): Promise<User> {
         this.logger.log(`call update`);
         this.logger.debug(`id: ${id}`);
         this.logger.debug(updateUserDto);
-        return from(this.usersService.update(id, updateUserDto));
+        return this.usersService.update(id, updateUserDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id') id: string): Observable<void> {
+    async remove(@Param('id') id: string): Promise<void> {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);
-        return from(this.usersService.remove(id));
+        return this.usersService.remove(id);
     }
 }
