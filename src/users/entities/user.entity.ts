@@ -12,4 +12,9 @@ export class User extends BaseEntity {
         length: 100,
     })
     password: string;
+
+    @Column({
+        default: false,
+    })
+    isActive: boolean;
 }

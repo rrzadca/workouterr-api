@@ -28,7 +28,7 @@ export class UsersController {
         this.logger.log(`call create`);
         this.logger.debug(createUserDto);
 
-        if (createUserDto.password !== createUserDto.retypedPassword) {
+        if (createUserDto.password !== createUserDto.confirmPassword) {
             this.logger.warn(`Passwords are not match`);
             throw new BadRequestException(['Passwords are not match']);
         }
