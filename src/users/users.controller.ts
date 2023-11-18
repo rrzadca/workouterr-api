@@ -16,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
+import { CurrentUser } from '../auth/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -49,6 +50,12 @@ export class UsersController {
         this.logger.log(`call findAll`);
 
         return this.usersService.findAll();
+    }
+
+    @Get('current')
+    @UseGuards(JwtAuthGuard)
+    async getCurrentUser(@CurrentUser() user: User): Promise<User | null> {
+        return user;
     }
 
     @Get(':id')
