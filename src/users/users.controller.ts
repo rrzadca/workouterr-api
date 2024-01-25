@@ -17,7 +17,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 import { CurrentUser } from '../auth/current-user.decorator';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
     private readonly logger: Logger = new Logger(UsersController.name);
@@ -25,6 +27,8 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post()
+    @ApiOperation({ summary: 'Create user' })
+    @ApiResponse({ status: 200, type: User })
     async create(@Body() createUserDto: CreateUserDto): Promise<User> {
         this.logger.log(`call create`);
         this.logger.debug(createUserDto);
@@ -46,6 +50,8 @@ export class UsersController {
 
     @Get()
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Get all users' })
+    @ApiResponse({ status: 200, type: [User] })
     async findAll(): Promise<User[]> {
         this.logger.log(`call findAll`);
 
@@ -54,12 +60,16 @@ export class UsersController {
 
     @Get('current')
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Get current user' })
+    @ApiResponse({ status: 200, type: User })
     async getCurrentUser(@CurrentUser() user: User): Promise<User | null> {
         return user;
     }
 
     @Get(':id')
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Get user details' })
+    @ApiResponse({ status: 200, type: User })
     async findOne(@Param('id') id: string): Promise<User> {
         this.logger.log(`call findOne`);
         this.logger.debug(`id: ${id}`);
@@ -69,6 +79,8 @@ export class UsersController {
 
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Update user' })
+    @ApiResponse({ status: 200, type: User })
     async update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
@@ -83,6 +95,7 @@ export class UsersController {
     @Delete(':id')
     @HttpCode(204)
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Delete user' })
     async remove(@Param('id') id: string): Promise<void> {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);
