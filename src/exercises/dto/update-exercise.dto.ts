@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateExerciseDto } from './create-exercise.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, Length } from 'class-validator';
 
-export class UpdateExerciseDto extends PartialType(CreateExerciseDto) {}
+export class UpdateExerciseDto {
+    @ApiProperty()
+    @IsString()
+    @Length(1, 100)
+    name: string;
+
+    @ApiProperty()
+    @IsString()
+    @Length(0, 1000)
+    description: string;
+}

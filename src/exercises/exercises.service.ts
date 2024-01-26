@@ -21,8 +21,8 @@ export class ExercisesService {
         });
     }
 
-    async findAll(): Promise<Exercise[]> {
-        return await this.repository.find();
+    async find(name?: string): Promise<Exercise[]> {
+        return await this.repository.findBy({ name: name });
     }
 
     async findOne(id: string): Promise<Exercise> {
