@@ -23,8 +23,8 @@ export class PlansGroupsService {
         });
     }
 
-    async findAll(): Promise<PlansGroup[]> {
-        return await this.repository.find({ relations: ['plans'] });
+    async find(name?: string): Promise<PlansGroup[]> {
+        return await this.repository.findBy({ name: name });
     }
 
     async findOne(id: string): Promise<PlansGroup> {

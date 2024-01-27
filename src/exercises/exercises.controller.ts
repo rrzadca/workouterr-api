@@ -9,6 +9,7 @@ import {
     Logger,
     HttpCode,
     UseGuards,
+    Query,
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
@@ -27,8 +28,10 @@ export class ExercisesController {
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create exercise' })
-    @ApiResponse({ status: 200, type: Exercise })
-    create(@Body() createExerciseDto: CreateExerciseDto): Promise<Exercise> {
+    @ApiResponse({ type: Exercise })
+    async create(
+        @Body() createExerciseDto: CreateExerciseDto,
+    ): Promise<Exercise> {
         this.logger.log(`call create`);
         this.logger.debug(createExerciseDto);
 
@@ -38,8 +41,8 @@ export class ExercisesController {
     @Get()
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Find exercises' })
-    @ApiResponse({ status: 200, type: Exercise })
-    find(@Param('name') name?: string): Promise<Exercise[]> {
+    @ApiResponse({ type: [Exercise] })
+    async find(@Query('name') name?: string): Promise<Exercise[]> {
         this.logger.log(`call find`);
         this.logger.debug(`name: ${name}`);
 
@@ -49,8 +52,8 @@ export class ExercisesController {
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get exercise details' })
-    @ApiResponse({ status: 200, type: Exercise })
-    findOne(@Param('id') id: string): Promise<Exercise> {
+    @ApiResponse({ type: Exercise })
+    async findOne(@Param('id') id: string): Promise<Exercise> {
         this.logger.log(`call findOne`);
         this.logger.debug(`id: ${id}`);
 
@@ -60,8 +63,8 @@ export class ExercisesController {
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Update exercise' })
-    @ApiResponse({ status: 200, type: Exercise })
-    update(
+    @ApiResponse({ type: Exercise })
+    async update(
         @Param('id') id: string,
         @Body() updateExerciseDto: UpdateExerciseDto,
     ): Promise<Exercise> {
@@ -76,8 +79,7 @@ export class ExercisesController {
     @HttpCode(204)
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Delete exercise' })
-    @ApiResponse({ status: 200, type: Exercise })
-    remove(@Param('id') id: string): Promise<void> {
+    async remove(@Param('id') id: string): Promise<void> {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);
 

@@ -8,12 +8,16 @@ import {
     Delete,
     Logger,
     UseGuards,
+    Query,
 } from '@nestjs/common';
 import { PlansGroupsService } from './plans-groups.service';
 import { CreatePlansGroupDto } from './dto/create-plans-group.dto';
 import { UpdatePlansGroupDto } from './dto/update-plans-group.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PlansGroup } from './entities/plans-group.entity';
 
+@ApiTags('plans group')
 @Controller('plans-groups')
 export class PlansGroupsController {
     private readonly logger = new Logger(PlansGroupsController.name);
@@ -22,33 +26,47 @@ export class PlansGroupsController {
 
     @Post()
     @UseGuards(JwtAuthGuard)
-    create(@Body() createPlansGroupDto: CreatePlansGroupDto) {
+    @ApiOperation({ summary: 'Create plans group' })
+    @ApiResponse({ type: PlansGroup })
+    async create(
+        @Body() createPlansGroupDto: CreatePlansGroupDto,
+    ): Promise<PlansGroup> {
         this.logger.log(`call create`);
         this.logger.debug(createPlansGroupDto);
+
         return this.plansGroupsService.create(createPlansGroupDto);
     }
 
     @Get()
     @UseGuards(JwtAuthGuard)
-    findAll() {
+    @ApiOperation({ summary: 'Get plans groups' })
+    @ApiResponse({ type: [PlansGroup] })
+    async find(@Query('name') name?: string): Promise<PlansGroup[]> {
         this.logger.log(`call findAll`);
-        return this.plansGroupsService.findAll();
+        this.logger.debug('name: ', name);
+
+        return this.plansGroupsService.find(name);
     }
 
     @Get(':id')
     @UseGuards(JwtAuthGuard)
-    findOne(@Param('id') id: string) {
+    @ApiOperation({ summary: 'Get plans group details' })
+    @ApiResponse({ type: PlansGroup })
+    async findOne(@Param('id') id: string): Promise<PlansGroup> {
         this.logger.log(`call findOne`);
         this.logger.debug(`id: ${id}`);
+
         return this.plansGroupsService.findOne(id);
     }
 
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
-    update(
+    @ApiOperation({ summary: 'Update plans group' })
+    @ApiResponse({ type: PlansGroup })
+    async update(
         @Param('id') id: string,
         @Body() updatePlansGroupDto: UpdatePlansGroupDto,
-    ) {
+    ): Promise<PlansGroup> {
         this.logger.log(`call update`);
         this.logger.debug(`id: ${id}`);
         this.logger.debug(updatePlansGroupDto);
@@ -57,7 +75,8 @@ export class PlansGroupsController {
 
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
-    remove(@Param('id') id: string) {
+    @ApiOperation({ summary: 'Delete plan group' })
+    async remove(@Param('id') id: string): Promise<void> {
         this.logger.log(`call remove`);
         this.logger.debug(`id: ${id}`);
         return this.plansGroupsService.remove(id);

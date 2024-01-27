@@ -35,8 +35,8 @@ export class PlansService {
         });
     }
 
-    async findAll(): Promise<Plan[]> {
-        return await this.repository.find();
+    async find(name?: string): Promise<Plan[]> {
+        return await this.repository.findBy({ name: name });
     }
 
     async findOne(id: string): Promise<Plan> {
