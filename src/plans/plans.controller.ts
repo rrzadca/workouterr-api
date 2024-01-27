@@ -14,8 +14,8 @@ import { PlansService } from './plans.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
 import { Plan } from './entities/plan.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../authenticate/auth-guards/jwt-auth.guard';
 
 @ApiTags('plans')
 @Controller('plans')

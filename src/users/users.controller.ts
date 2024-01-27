@@ -15,9 +15,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
-import { CurrentUser } from '../auth/current-user.decorator';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../authenticate/auth-guards/jwt-auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -58,13 +57,13 @@ export class UsersController {
         return this.usersService.findAll();
     }
 
-    @Get('current')
+    /*@Get('current')
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get current user' })
     @ApiResponse({ status: 200, type: User })
     async getCurrentUser(@CurrentUser() user: User): Promise<User | null> {
         return user;
-    }
+    }*/
 
     @Get(':id')
     @UseGuards(JwtAuthGuard)

@@ -7,7 +7,7 @@ import { PlansModule } from './plans/plans.module';
 import { PlansGroupsModule } from './plans-groups/plans-groups.module';
 import ormConfig from '../config/orm.config';
 import ormConfigProd from '../config/orm.config.prod';
-import { AuthModule } from './auth/auth.module';
+import { AuthenticateModule } from './authenticate/authenticate.module';
 
 @Module({
     imports: [
@@ -25,7 +25,7 @@ import { AuthModule } from './auth/auth.module';
         ExercisesModule,
         PlansModule,
         PlansGroupsModule,
-        AuthModule,
+        AuthenticateModule,
     ],
     controllers: [],
     providers: [],

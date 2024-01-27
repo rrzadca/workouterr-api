@@ -13,9 +13,9 @@ import {
 import { PlansGroupsService } from './plans-groups.service';
 import { CreatePlansGroupDto } from './dto/create-plans-group.dto';
 import { UpdatePlansGroupDto } from './dto/update-plans-group.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PlansGroup } from './entities/plans-group.entity';
+import { JwtAuthGuard } from '../authenticate/auth-guards/jwt-auth.guard';
 
 @ApiTags('plans group')
 @Controller('plans-groups')

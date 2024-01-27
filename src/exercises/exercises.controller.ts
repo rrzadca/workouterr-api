@@ -15,8 +15,8 @@ import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { Exercise } from './entities/exercise.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt.auth-guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../authenticate/auth-guards/jwt-auth.guard';
 
 @ApiTags('exercises')
 @Controller('exercises')

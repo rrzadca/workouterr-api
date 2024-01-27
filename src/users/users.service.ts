@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from '../auth/auth.service';
+import { AuthenticateService } from '../authenticate/services/authenticate.service';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +13,7 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly repository: Repository<User>,
-        private authService: AuthService,
+        private authService: AuthenticateService,
     ) {}
 
     async create(createUserDto: CreateUserDto): Promise<User> {
@@ -23,6 +23,7 @@ export class UsersService {
                 createUserDto.password,
             ),
             createdOn: new Date(),
+            isActive: true,
         });
     }
 

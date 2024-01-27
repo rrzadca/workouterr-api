@@ -6,9 +6,11 @@ export class BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @ApiProperty()
     @Column({ name: 'created_on' })
     createdOn: Date;
 
+    @ApiProperty()
     @Column({ name: 'updated_on', nullable: true })
     updatedOn: Date;
 }
